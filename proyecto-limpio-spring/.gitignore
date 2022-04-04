@@ -1,0 +1,7 @@
+target/
+../.idea
+.travis.yml
+.proyect
+.classpath
+.settings
+proyecto-limpio-spring.iml
