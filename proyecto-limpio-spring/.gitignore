@@ -1,6 +1,5 @@
 target/
 ../.idea
-.travis.yml
 .proyect
 .classpath
 .settings
