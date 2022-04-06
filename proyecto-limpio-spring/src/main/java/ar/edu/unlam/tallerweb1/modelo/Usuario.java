@@ -17,47 +17,89 @@ public class Usuario {
 	private Long id;
 	// para el resto de los atributo no se usan anotaciones entonces se usa el default de hibernate: la columna se llama igual que
 	// el atributo, la misma admite nulos, y el tipo de dato se deduce del tipo de dato de java.
-	private String email;
-	private String password;
-	private String rol;
-	private Boolean activo = false;
-	
+	private String nombre;
+	private String apellido;
+	private String correo;
+	private String dni;
+	private String telefono;
+	private String nick;
+	private String clave;
+
+	public Usuario(Long id, String nombre, String apellido, String correo, String dni, String telefono, String nick, String clave) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.correo = correo;
+		this.dni = dni;
+		this.telefono = telefono;
+		this.nick = nick;
+		this.clave = clave;
+	}
+
+	public Usuario() {
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getRol() {
-		return rol;
-	}
-	public void setRol(String rol) {
-		this.rol = rol;
-	}
-	public Boolean getActivo() {
-		return activo;
-	}
-	public void setActivo(Boolean activo) {
-		this.activo = activo;
+
+	public String getNombre() {
+		return nombre;
 	}
 
-	public boolean activo() {
-		return activo;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public void activar() {
-		activo = true;
-    }
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getClave() {
+		return clave;
+	}
+
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
 }
