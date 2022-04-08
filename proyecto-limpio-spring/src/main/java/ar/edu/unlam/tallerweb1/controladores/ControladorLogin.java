@@ -15,18 +15,24 @@ public class ControladorLogin {
         return getModelAndView(viewName, modelMap);
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "/validar-formulario-login")
+    public ModelAndView validarFormularioDeLoginEnviado(DatosLogin datosLogin) {
+        var modelMap = getModelMap();
+        var viewName = "home";
+        if (datosLogin.getValidadorDeClave() && datosLogin.getValidadorDeCorreo()) {
+            modelMap.put("registro_exitoso", "true");
+            viewName = "redirect:/principal";
+        } else {
+            modelMap.put("correo_invalido", "Ingresaste un correo invalido, por favor verifica que lo hayas ingresado correctamente");
+        }
+        return getModelAndView(viewName, modelMap);
+    }
+
     private ModelMap getModelMap() {
         return new ModelMap();
     }
 
     private ModelAndView getModelAndView(String viewName, ModelMap modelMap) {
         return new ModelAndView(viewName, modelMap);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path = "/validar-formulario-login")
-    public ModelAndView validarFormularioDeLoginEnviado(DatosLogin datosLogin) {
-        var modelMap = getModelMap();
-        modelMap.put("registro_exitoso", "true");
-        return getModelAndView("redirect:/principal", modelMap);
     }
 }

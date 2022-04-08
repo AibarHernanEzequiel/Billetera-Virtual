@@ -40,31 +40,46 @@ public class TestControladorLogin {
 
     @Test
     public void dadoQueUnClienteCompletaElFormDeLoginCuandoLoEnviaDeberiaAccederCorrectamente() {
-        var clienteRegistrado = givenQueExitenUnClienteRegistrado();
-        var datosLogin = whenCompletaElFormDeLoginYLoEnviaAValidar(clienteRegistrado);
+        var datosLogin = givenQueExitenUnClienteRegistrado();
+        whenEnviaAValidarElFormularioConLosDatosIngresados(datosLogin);
         thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(datosLogin);
     }
 
-    private DatosLogin whenCompletaElFormDeLoginYLoEnviaAValidar(Cliente clienteRegistrado) {
-        var validadorDeCorreo = new ValidadorDeCorreo(clienteRegistrado.getCorreo());
-        var validadorDeClave = new ValidadorDeClave(clienteRegistrado.getClave());
-        var datosLogin = new DatosLogin(validadorDeCorreo, validadorDeClave);
-        this.modelAndView = controladorLogin.validarFormularioDeLoginEnviado(datosLogin);
-        return datosLogin;
+
+    private DatosLogin givenQueExitenUnClienteRegistrado() {
+        var datosDeEntradaLogin = setearDatosDeLogin(new ValidadorDeCorreo("lala@lala.com"), new ValidadorDeClave("Aa####04"));
+        return datosDeEntradaLogin;
     }
 
     private void thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(DatosLogin datosLogin) {
-        assertThat(datosLogin.esValidoElCorreo()).isTrue();
-        assertThat(datosLogin.esValidaClave()).isTrue();
+        assertThat(datosLogin.getValidadorDeCorreo()).isTrue();
+        assertThat(datosLogin.getValidadorDeCorreo()).isTrue();
         assertThat(modelAndView.getModelMap().get("registro_exitoso")).isNotNull();
         assertThat(modelAndView.getModelMap().get("registro_exitoso")).isEqualTo("true");
         assertThat(modelAndView.getViewName()).isEqualTo("redirect:/principal");
     }
 
-    private Cliente givenQueExitenUnClienteRegistrado() {
-        var clienteRegistrado = new Cliente();
-        clienteRegistrado.setCorreo("lala@lala.com");
-        clienteRegistrado.setClave("Aa####04");
-        return clienteRegistrado;
+    @Test
+    public void dadoQueUnclienteRegistradoIngresaUnCorreoInvalidoCuandoEnviaElFormDeberiaMostrarLaVistaHomeConUnMensajeDeError() {
+        var datosDeEntradaDelLogin = givenQueUnClienteRegistradoIngresaUnCorreoInvalido();
+        whenEnviaAValidarElFormularioConLosDatosIngresados(datosDeEntradaDelLogin);
+        thenDeberiaMostrarLaVistaDelHomeConUnMensajeDeError();
+    }
+
+    private DatosLogin givenQueUnClienteRegistradoIngresaUnCorreoInvalido() {
+        return setearDatosDeLogin(new ValidadorDeCorreo("lalala"), new ValidadorDeClave("Aa####04"));
+    }
+
+    private void whenEnviaAValidarElFormularioConLosDatosIngresados(DatosLogin datosDeEntradaDelLogin) {
+        this.modelAndView = controladorLogin.validarFormularioDeLoginEnviado(datosDeEntradaDelLogin);
+    }
+
+    private void thenDeberiaMostrarLaVistaDelHomeConUnMensajeDeError() {
+        assertThat(modelAndView.getViewName()).isEqualTo("home");
+        assertThat(modelAndView.getModel().get("correo_invalido")).isEqualTo("Ingresaste un correo invalido, por favor verifica que lo hayas ingresado correctamente");
+    }
+
+    private DatosLogin setearDatosDeLogin(ValidadorDeCorreo correo, ValidadorDeClave clave) {
+        return new DatosLogin(correo, clave);
     }
 }

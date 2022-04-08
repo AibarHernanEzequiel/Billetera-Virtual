@@ -2,36 +2,18 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 public class DatosLogin {
 
-    private String correo;
-    private String clave;
     private Boolean validadorDeCorreo;
     private Boolean validadorDeClave;
 
     public DatosLogin(ValidadorDeCorreo validadorDeCorreo, ValidadorDeClave validadorDeClave) {
-        this.validadorDeCorreo = validadorDeCorreo.validarCorreo(correo);
-        this.validadorDeClave = validadorDeClave.validarClave(clave);
+        this.validadorDeCorreo = validadorDeCorreo.getValida();
+        this.validadorDeClave = validadorDeClave.getValida();
     }
 
     public DatosLogin() {
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getClave() {
-        return clave;
-    }
-
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
-
-    public Boolean esValidoElCorreo() {
+    public Boolean getValidadorDeCorreo() {
         return validadorDeCorreo;
     }
 
@@ -39,7 +21,7 @@ public class DatosLogin {
         this.validadorDeCorreo = validadorDeCorreo;
     }
 
-    public Boolean esValidaClave() {
+    public Boolean getValidadorDeClave() {
         return validadorDeClave;
     }
 
