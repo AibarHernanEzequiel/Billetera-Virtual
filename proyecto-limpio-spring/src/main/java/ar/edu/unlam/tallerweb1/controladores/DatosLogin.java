@@ -17,15 +17,8 @@ public class DatosLogin {
         return validadorDeCorreo;
     }
 
-    public void setValidadorDeCorreo(Boolean validadorDeCorreo) {
-        this.validadorDeCorreo = validadorDeCorreo;
-    }
-
     public Boolean getValidadorDeClave() {
         return validadorDeClave;
     }
 
-    public void setValidadorDeClave(Boolean validadorDeClave) {
-        this.validadorDeClave = validadorDeClave;
-    }
 }
