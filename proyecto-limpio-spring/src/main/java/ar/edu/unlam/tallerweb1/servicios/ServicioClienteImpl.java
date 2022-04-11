@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class ServicioLoginImpl implements ServicioLogin {
+public class ServicioClienteImpl implements ServicioCliente {
     @Override
     public Cliente buscarClientePorCorreo(String correo) {
         return null;

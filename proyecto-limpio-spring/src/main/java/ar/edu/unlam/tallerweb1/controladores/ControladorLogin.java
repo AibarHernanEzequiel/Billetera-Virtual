@@ -2,7 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
-import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,10 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ControladorLogin {
 
-    private final ServicioLogin servicioLogin;
+    private final ServicioCliente servicioLogin;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin) {
+    public ControladorLogin(ServicioCliente servicioLogin) {
         this.servicioLogin = servicioLogin;
     }
 

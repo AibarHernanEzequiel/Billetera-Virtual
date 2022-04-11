@@ -3,7 +3,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
 import ar.edu.unlam.tallerweb1.modelo.Cliente;
-import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCliente;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,11 +15,11 @@ public class TestControladorLogin {
 
     private ControladorLogin controladorLogin;
     private ModelAndView modelAndView;
-    private ServicioLogin servicioLogin;
+    private ServicioCliente servicioLogin;
 
     @Before
     public void init() {
-        servicioLogin = mock(ServicioLogin.class);
+        servicioLogin = mock(ServicioCliente.class);
         controladorLogin = new ControladorLogin(servicioLogin);
         modelAndView = new ModelAndView();
     }
