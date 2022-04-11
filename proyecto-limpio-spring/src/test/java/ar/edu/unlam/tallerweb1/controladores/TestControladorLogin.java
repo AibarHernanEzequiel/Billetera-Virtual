@@ -2,20 +2,25 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
+import ar.edu.unlam.tallerweb1.modelo.Cliente;
+import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class TestControladorLogin {
 
     private ControladorLogin controladorLogin;
     private ModelAndView modelAndView;
+    private ServicioLogin servicioLogin;
 
     @Before
     public void init() {
-        controladorLogin = new ControladorLogin();
+        servicioLogin = mock(ServicioLogin.class);
+        controladorLogin = new ControladorLogin(servicioLogin);
         modelAndView = new ModelAndView();
     }
 
@@ -57,6 +62,7 @@ public class TestControladorLogin {
         assertThat(modelAndView.getModelMap().get("registro_exitoso")).isNotNull();
         assertThat(modelAndView.getModelMap().get("registro_exitoso")).isEqualTo("true");
         assertThat(modelAndView.getViewName()).isEqualTo("redirect:/principal");
+        verify(servicioLogin, times(1)).buscarClientePorCorreo(any());
     }
 
     @Test
@@ -70,7 +76,23 @@ public class TestControladorLogin {
         return setearDatosDeLogin(new ValidadorDeCorreo("lalala"), new ValidadorDeClave("Aa####04"));
     }
 
-    private void whenEnviaAValidarElFormularioConLosDatosIngresados(DatosLogin datosDeEntradaDelLogin){
+    private DatosLogin setearDatosDeLogin(ValidadorDeCorreo correo, ValidadorDeClave clave) {
+        return new DatosLogin(correo, clave);
+    }
+
+    @Test
+    public void dadoQueUnClienteIngresaUnaClaveInvalidaCuandoEnviaAValidarElFormDeberiaMostrarseLaVistaDelHomeConUnMensajeDeError() throws ClaveInvalidaException, CorreoInvalidoException {
+        DatosLogin datosLogin = givenQueUnClienteIngresaUnaClaveInvalida();
+        whenEnviaAValidarElFormularioConLosDatosIngresados(datosLogin);
+        thenDeberiaMostrarLaVistaDelHomeConUnMensajeDeError("home", "clave_invalida", "Ingresaste una calve invalida, verifica que clave contenga: al menos una mayuscula, una o mas minusculas, uno o mas numeros, y ocho carateres de logintud");
+    }
+
+    private DatosLogin givenQueUnClienteIngresaUnaClaveInvalida() {
+        var datosLogin = new DatosLogin(new ValidadorDeCorreo("lala@lala.com"), new ValidadorDeClave("aa####04"));
+        return datosLogin;
+    }
+
+    private void whenEnviaAValidarElFormularioConLosDatosIngresados(DatosLogin datosDeEntradaDelLogin) {
         this.modelAndView = controladorLogin.validarFormularioDeLoginEnviado(datosDeEntradaDelLogin);
     }
 
@@ -79,14 +101,15 @@ public class TestControladorLogin {
         assertThat(modelAndView.getModel().get(nameError)).isEqualTo(value);
     }
 
-    private DatosLogin setearDatosDeLogin(ValidadorDeCorreo correo, ValidadorDeClave clave) {
-        return new DatosLogin(correo, clave);
+    @Test
+    public void dadoQueUnClienteRegistradoIniciaSesionCuandoLLamoAlServicioParaBuscarELUsuarioPorCorreoDeberiaValidarCorrectamente() throws ClaveInvalidaException {
+        var clienteRegistrado = givenQueExitenUnClienteRegistrado();
+        whenLLamoAlServicioDeLoginParaBuscarAlUsuarioPorCorreo(clienteRegistrado);
+        whenEnviaAValidarElFormularioConLosDatosIngresados(clienteRegistrado);
+        thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(clienteRegistrado);
     }
 
-    @Test
-    public void dadoQueUnClienteIngresaUnaClaveInvalidaCuandoEnviaAValidarElFormDeberiaMostrarseLaVistaDelHomeConUnMensajeDeError() throws ClaveInvalidaException, CorreoInvalidoException {
-        var datosLogin = new DatosLogin(new ValidadorDeCorreo("lala@lala.com"), new ValidadorDeClave("aa####04"));
-        whenEnviaAValidarElFormularioConLosDatosIngresados(datosLogin);
-        thenDeberiaMostrarLaVistaDelHomeConUnMensajeDeError("home", "clave_invalida", "Ingresaste una calve invalida, verifica que clave contenga: al menos una mayuscula, una o mas minusculas, uno o mas numeros, y ocho carateres de logintud");
+    private void whenLLamoAlServicioDeLoginParaBuscarAlUsuarioPorCorreo(DatosLogin clienteRegistrado) {
+        when(servicioLogin.buscarClientePorCorreo(clienteRegistrado.getCorreo())).thenReturn(new Cliente());
     }
 }

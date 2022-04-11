@@ -2,12 +2,23 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
+import ar.edu.unlam.tallerweb1.servicios.ServicioLogin;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+@Controller
 public class ControladorLogin {
+
+    private final ServicioLogin servicioLogin;
+
+    @Autowired
+    public ControladorLogin(ServicioLogin servicioLogin) {
+        this.servicioLogin = servicioLogin;
+    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/home")
     public ModelAndView irALaHomePage() {
@@ -28,6 +39,7 @@ public class ControladorLogin {
         var viewName = "home";
         try {
             validarClaveYCorreo(datosLogin);
+            servicioLogin.buscarClientePorCorreo(datosLogin.getCorreo());
             viewName = "redirect:/principal";
             modelMap.put("registro_exitoso", "true");
         } catch (ClaveInvalidaException e) {

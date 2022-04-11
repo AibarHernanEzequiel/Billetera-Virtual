@@ -2,12 +2,14 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 public class DatosLogin {
 
+    private String correo;
     private Boolean validadorDeCorreo;
     private Boolean validadorDeClave;
 
     public DatosLogin(ValidadorDeCorreo validadorDeCorreo, ValidadorDeClave validadorDeClave) {
         this.validadorDeCorreo = validadorDeCorreo.getValida();
         this.validadorDeClave = validadorDeClave.getValida();
+        this.correo = validadorDeCorreo.getCorreo();
     }
 
     public DatosLogin() {
@@ -21,4 +23,11 @@ public class DatosLogin {
         return validadorDeClave;
     }
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
 }
