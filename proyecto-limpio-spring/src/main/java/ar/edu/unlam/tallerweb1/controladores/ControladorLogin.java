@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
+import ar.edu.unlam.tallerweb1.excepciones.ClienteInexistenteException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCliente;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class ControladorLogin {
             modelMap.put("clave_invalida", "Ingresaste una calve invalida, verifica que clave contenga: al menos una mayuscula, una o mas minusculas, uno o mas numeros, y ocho carateres de logintud");
         } catch (CorreoInvalidoException e) {
             modelMap.put("correo_invalido", "Ingresaste un correo invalido, por favor verifica que lo hayas ingresado correctamente");
+        } catch (ClienteInexistenteException e) {
+            e.printStackTrace();
         }
         return viewName;
     }

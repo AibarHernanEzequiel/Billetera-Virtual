@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
+import ar.edu.unlam.tallerweb1.excepciones.ClienteInexistenteException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
 import ar.edu.unlam.tallerweb1.modelo.Cliente;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCliente;
@@ -45,7 +46,7 @@ public class TestControladorLogin {
     }
 
     @Test
-    public void dadoQueUnClienteCompletaElFormDeLoginCuandoLoEnviaDeberiaAccederCorrectamente() throws ClaveInvalidaException, CorreoInvalidoException {
+    public void dadoQueUnClienteCompletaElFormDeLoginCuandoLoEnviaDeberiaAccederCorrectamente() throws ClaveInvalidaException, CorreoInvalidoException, ClienteInexistenteException {
         var datosLogin = givenQueExitenUnClienteRegistrado();
         whenEnviaAValidarElFormularioConLosDatosIngresados(datosLogin);
         thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(datosLogin);
@@ -56,7 +57,7 @@ public class TestControladorLogin {
         return setearDatosDeLogin("lala@lala.com", "Aa####04");
     }
 
-    private void thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(DatosLogin datosLogin) {
+    private void thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(DatosLogin datosLogin) throws ClienteInexistenteException {
         assertThat(datosLogin.getValidadorDeCorreo()).isTrue();
         assertThat(datosLogin.getValidadorDeCorreo()).isTrue();
         assertThat(modelAndView.getModelMap().get("registro_exitoso")).isNotNull();
@@ -102,14 +103,14 @@ public class TestControladorLogin {
     }
 
     @Test
-    public void dadoQueUnClienteRegistradoIniciaSesionCuandoLLamoAlServicioParaBuscarELUsuarioPorCorreoDeberiaValidarCorrectamente() throws ClaveInvalidaException {
+    public void dadoQueUnClienteRegistradoIniciaSesionCuandoLLamoAlServicioParaBuscarELUsuarioPorCorreoDeberiaValidarCorrectamente() throws ClaveInvalidaException, ClienteInexistenteException {
         var clienteRegistrado = givenQueExitenUnClienteRegistrado();
         whenLLamoAlServicioDeLoginParaBuscarAlUsuarioPorCorreo(clienteRegistrado);
         whenEnviaAValidarElFormularioConLosDatosIngresados(clienteRegistrado);
         thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(clienteRegistrado);
     }
 
-    private void whenLLamoAlServicioDeLoginParaBuscarAlUsuarioPorCorreo(DatosLogin clienteRegistrado) {
+    private void whenLLamoAlServicioDeLoginParaBuscarAlUsuarioPorCorreo(DatosLogin clienteRegistrado) throws ClienteInexistenteException {
         when(servicioLogin.buscarClientePorCorreo(clienteRegistrado.getCorreo())).thenReturn(new Cliente());
     }
 }
