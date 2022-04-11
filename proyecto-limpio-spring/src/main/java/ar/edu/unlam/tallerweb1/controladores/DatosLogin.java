@@ -3,13 +3,17 @@ package ar.edu.unlam.tallerweb1.controladores;
 public class DatosLogin {
 
     private String correo;
+    private String clave;
     private Boolean validadorDeCorreo;
     private Boolean validadorDeClave;
 
-    public DatosLogin(ValidadorDeCorreo validadorDeCorreo, ValidadorDeClave validadorDeClave) {
+    public DatosLogin(String correo, String clave) {
+        this.correo = correo;
+        this.clave = clave;
+        ValidadorDeCorreo validadorDeCorreo = new ValidadorDeCorreo(correo);
         this.validadorDeCorreo = validadorDeCorreo.getValida();
+        ValidadorDeClave validadorDeClave = new ValidadorDeClave(clave);
         this.validadorDeClave = validadorDeClave.getValida();
-        this.correo = validadorDeCorreo.getCorreo();
     }
 
     public DatosLogin() {
@@ -29,5 +33,13 @@ public class DatosLogin {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 }

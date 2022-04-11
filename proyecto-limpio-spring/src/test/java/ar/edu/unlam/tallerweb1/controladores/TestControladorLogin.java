@@ -53,7 +53,7 @@ public class TestControladorLogin {
 
 
     private DatosLogin givenQueExitenUnClienteRegistrado() throws ClaveInvalidaException {
-        return setearDatosDeLogin(new ValidadorDeCorreo("lala@lala.com"), new ValidadorDeClave("Aa####04"));
+        return setearDatosDeLogin("lala@lala.com", "Aa####04");
     }
 
     private void thenDeberiaValidarCorrectamenteYRedireccionarALaPaginaPrincipalConUnMensajeDeExito(DatosLogin datosLogin) {
@@ -73,10 +73,10 @@ public class TestControladorLogin {
     }
 
     private DatosLogin givenQueUnClienteRegistradoIngresaUnCorreoInvalido() {
-        return setearDatosDeLogin(new ValidadorDeCorreo("lalala"), new ValidadorDeClave("Aa####04"));
+        return setearDatosDeLogin("lalala", "Aa####04");
     }
 
-    private DatosLogin setearDatosDeLogin(ValidadorDeCorreo correo, ValidadorDeClave clave) {
+    private DatosLogin setearDatosDeLogin(String correo, String clave) {
         return new DatosLogin(correo, clave);
     }
 
@@ -88,7 +88,7 @@ public class TestControladorLogin {
     }
 
     private DatosLogin givenQueUnClienteIngresaUnaClaveInvalida() {
-        var datosLogin = new DatosLogin(new ValidadorDeCorreo("lala@lala.com"), new ValidadorDeClave("aa####04"));
+        var datosLogin = new DatosLogin("lala@lala.com", "aa####04");
         return datosLogin;
     }
 
