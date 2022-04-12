@@ -8,6 +8,8 @@ import javax.persistence.Id;
 @Entity
 public class Moneda {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private Simbolo simbolo;
@@ -20,8 +22,7 @@ public class Moneda {
         this.id = id;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public Long getId() {
         return id;
     }

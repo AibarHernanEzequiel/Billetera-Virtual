@@ -6,6 +6,8 @@ import java.time.LocalDate;
 @Entity
 public class Cuenta {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
     private Moneda moneda;
@@ -28,8 +30,7 @@ public class Cuenta {
         this.id = id;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public Long getId() {
         return id;
     }

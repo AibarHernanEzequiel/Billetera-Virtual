@@ -26,7 +26,7 @@ public class Cliente extends Usuario {
     }
 
     public Cliente() {
-
+        this.cuenta = new Cuenta();
     }
 
     public Date getFechaDeNacimiento() {
