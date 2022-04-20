@@ -2,53 +2,63 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
-public class TestControladorRegistro {
+public class TestControladorRegistro
+{
 
     private ControladorRegistro controladorRegistro;
     private ModelAndView modelAndView;
+    private ModelMap modelMap;
 
     @Before
-    public void init() {
-        controladorRegistro = new ControladorRegistro();
-        modelAndView = new ModelAndView();
+    public void init()
+    {
+        this.controladorRegistro = new ControladorRegistro();
+        this.modelAndView = new ModelAndView();
+        this.modelMap = new ModelMap();
     }
 
     @Test
-    public void dadoQueUnClienteQuiereRegistrarseCuandoIngresaALaSeccionDeRegistroDeberiaMostrarElFormularioDeRegistro() {
-        givenQueUnClienteQuiereRegistrarse();
-        whenIngresaALaSeccionDeRegistro();
-        thenDeberiaMostrarUnaVistaConUnFormularioRegistro();
+    public void queUnClientePuedaAccederAlFormularioDeRegistro()
+    {
+        // Given que un usuario se encuentra en el home
+        givenQueUnUsuarioSeEncuentraEnElHome();
+        // When intenta acceder al formulario de registro
+        whenIntentaAccederAlFormularioDeRegistro();
+
+        // Then deberia mostrar el formulario de registro
+        thenDeberiaMostrarElFormularioRegistro();
     }
 
-    private void givenQueUnClienteQuiereRegistrarse() {
-
+    private void givenQueUnUsuarioSeEncuentraEnElHome()
+    {
     }
 
-    private void whenIngresaALaSeccionDeRegistro() {
-        this.modelAndView = controladorRegistro.irAlFormularioDeRegistro();
-    }
-
-    private void thenDeberiaMostrarUnaVistaConUnFormularioRegistro() {
+    private void thenDeberiaMostrarElFormularioRegistro()
+    {
         assertThat(modelAndView.getViewName()).isEqualTo("formulario-registro");
-        assertThat(modelAndView.getModelMap().get("datosRegistro")).isNotNull();
-        assertThat(modelAndView.getModelMap().get("datosRegistro")).isInstanceOf(DatosRegistro.class);
+        verificarQueSeEnvieComoModelAttributeUnObjetoDatosRegistro();
+    }
+
+    private void verificarQueSeEnvieComoModelAttributeUnObjetoDatosRegistro()
+    {
+        assertThat(modelAndView.getModel().get("datosRegistro")).isNotNull();
+        assertThat(modelAndView.getModel().get("datosRegistro")).isInstanceOf(DatosRegistro.class);
+    }
+
+    private void whenIntentaAccederAlFormularioDeRegistro()
+    {
+        modelAndView = controladorRegistro.irAlFormularioRegistro(modelMap);
     }
 
     @Test
-    public void test() {
-        /*
-         * dado que un cliente ingresa los datos de registro en el formulario de registro
-         * cuando el cliente envia el formulario de registro a validar
-         * deberia validar correctamente
-         * */
-        var datosRegistro = new DatosRegistro("nombre", "apellido", "telefono", "dni", "correo", "nickname", "clave", "repiteClave");
-        this.modelAndView = controladorRegistro.validarFormularioDeRegistro(datosRegistro);
-        assertThat(modelAndView.getViewName()).isEqualTo("redirect:/home");
-        assertThat(modelAndView.getModelMap().get("registro_exitoso")).isEqualTo("true");
-        
+    public void test()
+    {
+
     }
 }
