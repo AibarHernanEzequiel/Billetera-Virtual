@@ -26,17 +26,18 @@ public class TestControladorRegistro
     @Test
     public void queUnClientePuedaAccederAlFormularioDeRegistro()
     {
-        // Given que un usuario se encuentra en el home
         givenQueUnUsuarioSeEncuentraEnElHome();
-        // When intenta acceder al formulario de registro
         whenIntentaAccederAlFormularioDeRegistro();
-
-        // Then deberia mostrar el formulario de registro
         thenDeberiaMostrarElFormularioRegistro();
     }
 
     private void givenQueUnUsuarioSeEncuentraEnElHome()
     {
+    }
+
+    private void whenIntentaAccederAlFormularioDeRegistro()
+    {
+        modelAndView = controladorRegistro.irAlFormularioRegistro(modelMap);
     }
 
     private void thenDeberiaMostrarElFormularioRegistro()
@@ -51,14 +52,46 @@ public class TestControladorRegistro
         assertThat(modelAndView.getModel().get("datosRegistro")).isInstanceOf(DatosRegistro.class);
     }
 
-    private void whenIntentaAccederAlFormularioDeRegistro()
+    @Test
+    public void queUnClienteAlEnviarElFormularioDeRegistroConSusDatosValideCorrectamente()
     {
-        modelAndView = controladorRegistro.irAlFormularioRegistro(modelMap);
+        var datosRegistro = givenQueUnClienteIngresaSusDatosEnElFormularioDeRegistro();
+        whenElClienteEnviaElFormulario(datosRegistro, modelMap);
+        thenDeberiaValidarCorrectamenteMostrandoUnMensajeExitoYRedireccionarAlLogin();
+    }
+
+    private DatosRegistro givenQueUnClienteIngresaSusDatosEnElFormularioDeRegistro()
+    {
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","1234","1234");
+    }
+
+    private void whenElClienteEnviaElFormulario(DatosRegistro datosRegistro, ModelMap modelMap)
+    {
+        modelAndView = controladorRegistro.validarFormularioRegistro(datosRegistro,modelMap);
+    }
+
+    private void thenDeberiaValidarCorrectamenteMostrandoUnMensajeExitoYRedireccionarAlLogin()
+    {
+        assertThat(modelAndView.getModel().get("registro_exitoso")).isEqualTo("true");
+        assertThat(modelAndView.getViewName()).isEqualTo("redirect:/login");
     }
 
     @Test
-    public void test()
+    public void queUnClienteAlEnviarElFormConUnCorreoInvalidoMuestreUnMensajeDeError()
     {
+        DatosRegistro datosRegistroConCorreoInvalido = givenQueUnClienteIngresaUnCorreoInvalido();
+        whenElClienteEnviaElFormulario(datosRegistroConCorreoInvalido,modelMap);
+        thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario();
+    }
 
+    private DatosRegistro givenQueUnClienteIngresaUnCorreoInvalido()
+    {
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar.com","1234","1234");
+    }
+
+    private void thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario()
+    {
+        assertThat(modelAndView.getModel().get("correo_invalido")).isEqualTo("Se introdujo un correo invalido, verifique el correo ingresado");
+        assertThat(modelAndView.getViewName()).isEqualTo("formulario-registro");
     }
 }

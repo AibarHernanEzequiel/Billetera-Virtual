@@ -14,6 +14,23 @@ public class ControladorRegistro
     public ModelAndView irAlFormularioRegistro(ModelMap modelMap)
     {
         modelMap.put("datosRegistro", new DatosRegistro());
-        return new ModelAndView("formulario-registro", modelMap);
+        return getModelAndView("formulario-registro", modelMap);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/validar-formulario-registro")
+    public ModelAndView validarFormularioRegistro(DatosRegistro datosRegistro, ModelMap modelMap)
+    {
+        var viewName = "redirect:/login";
+        if (!ValidadorDeCorreo.validarCorreo(datosRegistro.getCorreo()))
+        {
+            modelMap.put("correo_invalido","Se introdujo un correo invalido, verifique el correo ingresado");
+            viewName = "formulario-registro";
+        }
+        else modelMap.put("registro_exitoso","true");
+        return getModelAndView(viewName, modelMap);
+    }
+
+    private ModelAndView getModelAndView(String viewName, ModelMap modelMap) {
+        return new ModelAndView(viewName, modelMap);
     }
 }
