@@ -1,28 +1,14 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-public class ValidadorDeCorreo {
+import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
 
-    private Boolean valida;
-    private String correo;
-
-    public ValidadorDeCorreo(String correo) {
-        this.correo = correo;
-        validarCorreo(this.correo);
-    }
-
-    public void validarCorreo(String correo) {
-        valida = correo.contains("@") && correo.endsWith(".com");
-    }
-
-    public Boolean getValida() {
-        return valida;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
+public class ValidadorDeCorreo
+{
+    public static boolean validarCorreo(String correo) throws CorreoInvalidoException {
+        if (correo.contains("@") && correo.endsWith(".com"))
+        {
+            return true;
+        }
+        throw new CorreoInvalidoException();
     }
 }
