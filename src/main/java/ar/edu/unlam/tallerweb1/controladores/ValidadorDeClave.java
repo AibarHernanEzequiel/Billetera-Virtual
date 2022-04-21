@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
+import ar.edu.unlam.tallerweb1.excepciones.ClavesNoCoincidentesException;
 
 public class ValidadorDeClave {
     public static boolean validarClave(String clave) throws ClaveInvalidaException {
@@ -30,5 +31,13 @@ public class ValidadorDeClave {
             }
         }
         return false;
+    }
+
+    public static boolean validarClaveYRepiteClave(String clave, String repiteClave) throws ClavesNoCoincidentesException {
+        if (clave.equals(repiteClave))
+        {
+            return true;
+        }
+        throw new ClavesNoCoincidentesException();
     }
 }

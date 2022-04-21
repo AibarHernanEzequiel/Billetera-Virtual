@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
+import ar.edu.unlam.tallerweb1.excepciones.ClavesNoCoincidentesException;
 import ar.edu.unlam.tallerweb1.excepciones.CorreoInvalidoException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -33,12 +34,15 @@ public class ControladorRegistro
         {
             ValidadorDeCorreo.validarCorreo(datosRegistro.getCorreo());
             ValidadorDeClave.validarClave(datosRegistro.getClave());
+            ValidadorDeClave.validarClaveYRepiteClave(datosRegistro.getClave(),datosRegistro.getRepiteClave());
             modelMap.put("registro_exitoso","true");
             viewName = "redirect:/login";
         } catch (CorreoInvalidoException e) {
             modelMap.put("correo_invalido", MensajeDeError.correoInvalido());
         } catch (ClaveInvalidaException e) {
             modelMap.put("clave_invalida", MensajeDeError.claveInvalida());
+        } catch (ClavesNoCoincidentesException e) {
+            modelMap.put("claves_incorrectas", MensajeDeError.clavesIncorrectas());
         }
         return viewName;
     }

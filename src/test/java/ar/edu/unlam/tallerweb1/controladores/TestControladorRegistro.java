@@ -63,7 +63,7 @@ public class TestControladorRegistro
 
     private DatosRegistro givenQueUnClienteIngresaSusDatosEnElFormularioDeRegistro()
     {
-        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","Ezequiel1","1234","ezequielaibar");
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","Ezequiel1","Ezequiel1","ezequielaibar");
     }
 
     private void whenElClienteEnviaElFormulario(DatosRegistro datosRegistro, ModelMap modelMap)
@@ -107,5 +107,22 @@ public class TestControladorRegistro
     private DatosRegistro givenQueUnClienteIngresaUnaClaveInvalida()
     {
         return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","1234","1234","ezequielaibar");
+    }
+
+    @Test
+    public void queUnClienteAlEnviarUnFormConClavesQueNoCoincidenDeberiaMostrarUnMensajeDeError()
+    {
+        // Given que un cliente ingresa claves distintas en los campos clave y repiteClave
+        var datosRegistroConClavesIncorrectas = givenQueUnClienteIngresaClavesQueNoCoinciden();
+        // When enviar el formulario
+        whenElClienteEnviaElFormulario(datosRegistroConClavesIncorrectas, modelMap);
+
+        // Then deberia mostrar un mensaje de error en la vista del formulario
+        thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario("claves_incorrectas", "Las claves ingresadas no coinciden, verifica que hayas ingresado correctamente las claves");
+    }
+
+    private DatosRegistro givenQueUnClienteIngresaClavesQueNoCoinciden()
+    {
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","Ezequielaibar1","Ezequielaibar2","ezequielaibar");
     }
 }
