@@ -1,12 +1,13 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.excepciones.ClaveInvalidaException;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
 
 public class TestControladorRegistro
 {
@@ -62,7 +63,7 @@ public class TestControladorRegistro
 
     private DatosRegistro givenQueUnClienteIngresaSusDatosEnElFormularioDeRegistro()
     {
-        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","1234","1234");
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","Ezequiel1","1234","ezequielaibar");
     }
 
     private void whenElClienteEnviaElFormulario(DatosRegistro datosRegistro, ModelMap modelMap)
@@ -81,17 +82,30 @@ public class TestControladorRegistro
     {
         DatosRegistro datosRegistroConCorreoInvalido = givenQueUnClienteIngresaUnCorreoInvalido();
         whenElClienteEnviaElFormulario(datosRegistroConCorreoInvalido,modelMap);
-        thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario();
+        thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario("correo_invalido", "Se introdujo un correo invalido, verifique el correo ingresado");
     }
 
     private DatosRegistro givenQueUnClienteIngresaUnCorreoInvalido()
     {
-        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar.com","1234","1234");
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar.com","1234","1234","ezequielaibar");
     }
 
-    private void thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario()
+    private void thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario(String error, String mensaje)
     {
-        assertThat(modelAndView.getModel().get("correo_invalido")).isEqualTo("Se introdujo un correo invalido, verifique el correo ingresado");
+        assertThat(modelAndView.getModel().get(error)).isEqualTo(mensaje);
         assertThat(modelAndView.getViewName()).isEqualTo("formulario-registro");
+    }
+
+    @Test
+    public void queUnClienteAlEnviarElFormConUnaClaveInvalidaDeberiaMostrarUnMensajeDeError()
+    {
+        var datosRegistroConClaveInvalida = givenQueUnClienteIngresaUnaClaveInvalida();
+        whenElClienteEnviaElFormulario(datosRegistroConClaveInvalida, modelMap);
+        thenDeberiaMostrarUnMensajeDeErrorEnLaVistaDelFormulario("clave_invalida","Ingresaste un clave invalida, para que sea valida debe contener 10 caracteres, entre ellos al menos una mayuscula, y debe contener al menos dos numeros");
+    }
+
+    private DatosRegistro givenQueUnClienteIngresaUnaClaveInvalida()
+    {
+        return new DatosRegistro("Ezequiel","Aibar","ezequielaibar@gmail.com","1234","1234","ezequielaibar");
     }
 }

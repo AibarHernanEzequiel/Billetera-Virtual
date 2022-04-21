@@ -7,14 +7,16 @@ public class DatosRegistro
     private String correo;
     private String clave;
     private String repiteClave;
+    private String nickName;
 
-    public DatosRegistro(String nombre, String apellido, String correo, String clave, String repiteClave)
+    public DatosRegistro(String nombre, String apellido, String correo, String clave, String repiteClave, String nickName)
     {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.clave = clave;
         this.repiteClave = repiteClave;
+        this.nickName = nickName;
     }
 
     public DatosRegistro()
@@ -69,5 +71,20 @@ public class DatosRegistro
     public String getRepiteClave()
     {
         return repiteClave;
+    }
+
+    public void setRepiteClave(String repiteClave)
+    {
+        this.repiteClave = repiteClave;
+    }
+
+    public String getNickName()
+    {
+        return nickName;
+    }
+
+    public void setNickName(String nickName)
+    {
+        this.nickName = nickName;
     }
 }
