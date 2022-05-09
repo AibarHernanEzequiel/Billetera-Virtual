@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/billetera-virtual.iml" filepath="$PROJECT_DIR$/.idea/billetera-virtual.iml" />
-      <module fileurl="file://$PROJECT_DIR$/proyecto-limpio-spring/proyecto-limpio-spring.iml" filepath="$PROJECT_DIR$/proyecto-limpio-spring/proyecto-limpio-spring.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../virual-wallet.iml" filepath="$PROJECT_DIR$/../virual-wallet.iml" />
     </modules>
   </component>
 </project>

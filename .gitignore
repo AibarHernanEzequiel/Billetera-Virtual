@@ -1,9 +1,33 @@
+HELP.md
 target/
-.idea
-.proyect
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
 .classpath
+.factorypath
+.project
 .settings
-proyecto-limpio-spring.iml
-Billetera-virtual.drawio.png
-Parcial-2-turno-manana-1C_1.pdf
-Requerimientos
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
