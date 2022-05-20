@@ -1,17 +1,11 @@
 package com.aibar.controllers;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import javax.security.auth.message.callback.PasswordValidationCallback;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aibar.exceptions.InvalidEmailException;
@@ -23,18 +17,15 @@ import com.aibar.exceptions.PasswordNotEquals;
 @RestController
 public class RegisterController {
 
+	private HttpStatus status = HttpStatus.CREATED;
 	@PostMapping(value = "validar-formulario")
-	public ResponseEntity<Map<String, Object>> validarFormulario(@RequestBody RegisterData registerData) {
-		Map<String, Object> map = new HashMap<>();
-		HttpStatus status = HttpStatus.CREATED;
+	public ResponseEntity<Map<String, Object>> validarFormulario(@RequestBody RegisterData registerData, Map<String, Object> map) {
 		try {
-			if (isValidEmail(registerData) && isValidPassword(registerData)) {
+			if (isValidEmailAndPassword(registerData)) {
 				map.put("Mensaje", "Te registraste correctamente");
 			}
 		} catch (InvalidEmailException e) {
-			map.put("Error", "P-500");
-			map.put("Mensaje", "Ingresaste un email invalido");
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			addErrorAndMessageAndSetHttpStatus(map, "P-500", "Ingresaste un email invalido");
 		} catch (PasswordNotEquals e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,12 +36,19 @@ public class RegisterController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidLength e) {
-			map.put("Error", "P-501");
-			map.put("Mensaje", "Ingresaste una clave con longitud invalida, debe contener al menos 8 caracteres");
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			addErrorAndMessageAndSetHttpStatus(map, "P-501", "Ingresaste una clave con longitud invalida, debe contener al menos 8 caracteres");
 		}
+		return new ResponseEntity<>(map, status);
+	}
 
-		return new ResponseEntity<Map<String, Object>>(map, status);
+	private void addErrorAndMessageAndSetHttpStatus(Map<String, Object> map, String v, String Ingresaste_un_email_invalido) {
+		map.put("Error", v);
+		map.put("Mensaje", Ingresaste_un_email_invalido);
+		status = HttpStatus.INTERNAL_SERVER_ERROR;
+	}
+
+	private boolean isValidEmailAndPassword(RegisterData registerData) throws InvalidEmailException, PasswordNotEquals, NotContainsCapitalLetters, NotContainsNunbers, InvalidLength {
+		return isValidEmail(registerData) && isValidPassword(registerData);
 	}
 
 	private boolean isValidPassword(RegisterData registerData)
