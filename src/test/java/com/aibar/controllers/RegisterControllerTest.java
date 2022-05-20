@@ -41,8 +41,10 @@ public class RegisterControllerTest {
     }
 
     @Test
-    void test() {
-
+    void queUnUsuarioCuandoIngreseClavesDistintasNoPuedaRegistrarse() {
+        RegisterData passwordsNotEquals = givenQueUnUsuarioIngresaClavesDistintas();
+        ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(passwordsNotEquals);
+        thenElRegistroFallaYDevuelveUnStatus500(response, "P-502", "Las claves no coinciden, verifica que sean iguales");
     }
 
     private RegisterData givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistro() {
@@ -55,6 +57,10 @@ public class RegisterControllerTest {
 
     private RegisterData givenQueUnUsuarioIngresaUnaClaveInvalida() {
         return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "A123456", "A123456");
+    }
+
+    private RegisterData givenQueUnUsuarioIngresaClavesDistintas() {
+        return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "A1234567", "A1234568");
     }
 
     private ResponseEntity<Map<String, Object>> whenEnviaElFormulario(RegisterData data) {
