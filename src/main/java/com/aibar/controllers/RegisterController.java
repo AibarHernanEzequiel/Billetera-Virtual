@@ -30,8 +30,7 @@ public class RegisterController {
         } catch (PasswordNotEquals e) {
             addErrorAndMessageAndSetHttpStatus(map, "P-502", "Las claves no coinciden, verifica que sean iguales");
         } catch (NotContainsCapitalLetters e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            addErrorAndMessageAndSetHttpStatus(map, "P-503", "La clave debe contener al menos una letra mayuscula");
         } catch (NotContainsNunbers e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -41,9 +40,9 @@ public class RegisterController {
         return new ResponseEntity<>(map, status);
     }
 
-    private void addErrorAndMessageAndSetHttpStatus(Map<String, Object> map, String v, String Ingresaste_un_email_invalido) {
-        map.put("Error", v);
-        map.put("Mensaje", Ingresaste_un_email_invalido);
+    private void addErrorAndMessageAndSetHttpStatus(Map<String, Object> map, String errorCode, String message) {
+        map.put("Error", errorCode);
+        map.put("Mensaje", message);
         status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 

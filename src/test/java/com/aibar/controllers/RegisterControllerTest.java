@@ -47,6 +47,13 @@ public class RegisterControllerTest {
         thenElRegistroFallaYDevuelveUnStatus500(response, "P-502", "Las claves no coinciden, verifica que sean iguales");
     }
 
+    @Test
+    public void queUnUsuarioCuandoIngreseUnaClaveSinMayusculasNoPuedaRegistrase() {
+        RegisterData passwordWithoutCapitalsLetter = givenQueUnUsuarioIngresaUnaClaveSinMayusculas();
+        ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(passwordWithoutCapitalsLetter);
+        thenElRegistroFallaYDevuelveUnStatus500(response, "P-503", "La clave debe contener al menos una letra mayuscula");
+    }
+
     private RegisterData givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistro() {
         return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "A1234567", "A1234567");
     }
@@ -61,6 +68,10 @@ public class RegisterControllerTest {
 
     private RegisterData givenQueUnUsuarioIngresaClavesDistintas() {
         return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "A1234567", "A1234568");
+    }
+
+    private RegisterData givenQueUnUsuarioIngresaUnaClaveSinMayusculas() {
+        return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "a1234567", "a1234567");
     }
 
     private ResponseEntity<Map<String, Object>> whenEnviaElFormulario(RegisterData data) {
