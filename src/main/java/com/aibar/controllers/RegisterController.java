@@ -27,23 +27,16 @@ public class RegisterController {
             }
         } catch (InvalidEmailException e) {
             addErrorAndMessageAndSetHttpStatus(map, "P-500", "Ingresaste un email invalido");
+        } catch (InvalidLength e) {
+            addErrorAndMessageAndSetHttpStatus(map, "P-501", "Ingresaste una clave con longitud invalida, debe contener al menos 8 caracteres");
         } catch (PasswordNotEquals e) {
             addErrorAndMessageAndSetHttpStatus(map, "P-502", "Las claves no coinciden, verifica que sean iguales");
         } catch (NotContainsCapitalLetters e) {
             addErrorAndMessageAndSetHttpStatus(map, "P-503", "La clave debe contener al menos una letra mayuscula");
         } catch (NotContainsNunbers e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvalidLength e) {
-            addErrorAndMessageAndSetHttpStatus(map, "P-501", "Ingresaste una clave con longitud invalida, debe contener al menos 8 caracteres");
+            addErrorAndMessageAndSetHttpStatus(map, "P-504", "La clave debe contener al menos un numero");
         }
         return new ResponseEntity<>(map, status);
-    }
-
-    private void addErrorAndMessageAndSetHttpStatus(Map<String, Object> map, String errorCode, String message) {
-        map.put("Error", errorCode);
-        map.put("Mensaje", message);
-        status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     private boolean isValidEmailAndPassword(RegisterData registerData) throws InvalidEmailException, PasswordNotEquals, NotContainsCapitalLetters, NotContainsNunbers, InvalidLength {
@@ -58,4 +51,9 @@ public class RegisterController {
         return EmailValidator.validateEmail(registerData.getEmail());
     }
 
+    private void addErrorAndMessageAndSetHttpStatus(Map<String, Object> map, String errorCode, String message) {
+        map.put("Error", errorCode);
+        map.put("Mensaje", message);
+        status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
 }

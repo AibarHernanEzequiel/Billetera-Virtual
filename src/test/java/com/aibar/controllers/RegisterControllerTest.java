@@ -54,6 +54,13 @@ public class RegisterControllerTest {
         thenElRegistroFallaYDevuelveUnStatus500(response, "P-503", "La clave debe contener al menos una letra mayuscula");
     }
 
+    @Test
+    public void queUnUsuarioCuandoIngreseUnaClaveSinNumerosNoPuedaRegistrarse() {
+        RegisterData passwordWithOutNumbers = givenQueUnUsuarioIngresaUnaClaveSinNumeros();
+        ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(passwordWithOutNumbers);
+        thenElRegistroFallaYDevuelveUnStatus500(response, "P-504", "La clave debe contener al menos un numero");
+    }
+
     private RegisterData givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistro() {
         return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "A1234567", "A1234567");
     }
@@ -72,6 +79,10 @@ public class RegisterControllerTest {
 
     private RegisterData givenQueUnUsuarioIngresaUnaClaveSinMayusculas() {
         return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "a1234567", "a1234567");
+    }
+
+    private RegisterData givenQueUnUsuarioIngresaUnaClaveSinNumeros() {
+        return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "Qwertyui", "Qwertyui");
     }
 
     private ResponseEntity<Map<String, Object>> whenEnviaElFormulario(RegisterData data) {
