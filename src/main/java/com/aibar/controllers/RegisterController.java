@@ -20,7 +20,7 @@ public class RegisterController {
     private HttpStatus status = HttpStatus.CREATED;
 
     @PostMapping(value = "validar-formulario")
-    public ResponseEntity<Map<String, Object>> validarFormulario(@RequestBody RegisterData registerData, Map<String, Object> map) {
+    public ResponseEntity<Map<String, Object>> validarFormularioDeRegistro(@RequestBody RegisterData registerData, Map<String, Object> map) {
         try {
             if (isValidEmailAndPassword(registerData)) {
                 map.put("Mensaje", "Te registraste correctamente");

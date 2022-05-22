@@ -7,21 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = RegisterController.class)
+@SpringBootTest
 public class RegisterControllerTest {
 
-    private RegisterController controller = new RegisterController();
+    private final RegisterController controller = new RegisterController();
 
     @Test
     void queCuandoUnUsuarioQuieraRegistrarseValideCorrectamente() {
-        RegisterData data = givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistro();
+        RegisterData data = givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistroCorrectamente();
         ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(data);
         thenDeberiaEnviarUnMensajeYElStatusCodeDebeSerCreated(response);
     }
@@ -61,7 +58,7 @@ public class RegisterControllerTest {
         thenElRegistroFallaYDevuelveUnStatus500(response, "P-504", "La clave debe contener al menos un numero");
     }
 
-    private RegisterData givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistro() {
+    private RegisterData givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistroCorrectamente() {
         return getRegisterData("Ezequiel", "Aibar", "ezequiel@gmail.com", "A1234567", "A1234567");
     }
 
@@ -86,7 +83,7 @@ public class RegisterControllerTest {
     }
 
     private ResponseEntity<Map<String, Object>> whenEnviaElFormulario(RegisterData data) {
-        return controller.validarFormulario(data, new HashMap<String, Object>());
+        return controller.validarFormularioDeRegistro(data, new HashMap<String, Object>());
     }
 
     private void thenDeberiaEnviarUnMensajeYElStatusCodeDebeSerCreated(ResponseEntity<Map<String, Object>> response) {
