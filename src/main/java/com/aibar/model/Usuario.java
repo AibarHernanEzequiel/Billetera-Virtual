@@ -1,28 +1,28 @@
-package com.aibar.controllers;
+package com.aibar.model;
 
-public class RegisterData {
+import com.aibar.controllers.RegisterData;
 
-    private String nickName;
-
-    public RegisterData() {
-
-    }
-
-    public RegisterData(String nickName, String nombre, String apellido, String email, String password, String repeatPassword) {
-        super();
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-        this.password = password;
-        this.repeatPassword = repeatPassword;
-        this.nickName = nickName;
-    }
+public class Usuario {
 
     private String nombre;
     private String apellido;
     private String email;
     private String password;
     private String repeatPassword;
+    private String nickname;
+
+    public Usuario(RegisterData registerData) {
+        this.nombre = registerData.getNombre();
+        this.apellido = registerData.getApellido();
+        this.email = registerData.getEmail();
+        this.password = registerData.getPassword();
+        this.repeatPassword = registerData.getRepeatPassword();
+        this.nickname = registerData.getNickName();
+    }
+
+    public Usuario() {
+
+    }
 
     public String getNombre() {
         return nombre;
@@ -65,10 +65,6 @@ public class RegisterData {
     }
 
     public String getNickName() {
-        return this.nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+        return this.nickname;
     }
 }

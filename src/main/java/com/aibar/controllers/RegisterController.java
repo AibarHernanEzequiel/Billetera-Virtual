@@ -1,28 +1,38 @@
 package com.aibar.controllers;
 
-import java.util.Map;
-
+import com.aibar.exceptions.*;
+import com.aibar.model.Usuario;
+import com.aibar.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aibar.exceptions.InvalidEmailException;
-import com.aibar.exceptions.InvalidLength;
-import com.aibar.exceptions.NotContainsCapitalLetters;
-import com.aibar.exceptions.NotContainsNunbers;
-import com.aibar.exceptions.PasswordNotEquals;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class RegisterController {
 
     private HttpStatus status = HttpStatus.CREATED;
 
+    @Autowired
+    private UserService service;
+
+    public RegisterController(UserService service) {
+        this.service = service;
+    }
+
     @PostMapping(value = "validar-formulario")
-    public ResponseEntity<Map<String, Object>> validarFormularioDeRegistro(@RequestBody RegisterData registerData, Map<String, Object> map) {
+    public ResponseEntity<Map<String, Object>> validarFormularioDeRegistro(@RequestBody RegisterData registerData) {
+        Map<String, Object> map = new HashMap<>();
         try {
             if (isValidEmailAndPassword(registerData)) {
+                Usuario aRegistrar = service.registrarUsuario(registerData);
+                map.put("Email", aRegistrar.getEmail());
+                map.put("Nickname", aRegistrar.getNickName());
                 map.put("Mensaje", "Te registraste correctamente");
             }
         } catch (InvalidEmailException e) {
