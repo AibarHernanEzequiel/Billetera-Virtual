@@ -45,6 +45,8 @@ public class RegisterController {
             addErrorAndMessageAndSetHttpStatus(map, "P-503", "La clave debe contener al menos una letra mayuscula");
         } catch (NotContainsNunbers e) {
             addErrorAndMessageAndSetHttpStatus(map, "P-504", "La clave debe contener al menos un numero");
+        } catch (UsuarioYaExistenteException e) {
+            throw new RuntimeException(e);
         }
         return new ResponseEntity<>(map, status);
     }

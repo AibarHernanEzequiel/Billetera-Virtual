@@ -1,5 +1,6 @@
 package com.aibar.controllers;
 
+import com.aibar.exceptions.UsuarioYaExistenteException;
 import com.aibar.model.Usuario;
 import com.aibar.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class RegisterControllerTest {
     private String nickname = "EzequielAibar";
 
     @Test
-    void queCuandoUnUsuarioQuieraRegistrarseValideCorrectamente() {
+    void queCuandoUnUsuarioQuieraRegistrarseValideCorrectamente() throws UsuarioYaExistenteException {
         RegisterData data = givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistroCorrectamente();
         when(service.registrarUsuario(data)).thenReturn(new Usuario(data));
         ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(data);
@@ -70,14 +71,14 @@ public class RegisterControllerTest {
     }
 
     @Test
-    void queCuandoLlamoAlServicioDeRegistrarUnUsuarioEntoncesSePuedaRegistrarUnUsuario() {
+    void queCuandoLlamoAlServicioDeRegistrarUnUsuarioEntoncesSePuedaRegistrarUnUsuario() throws UsuarioYaExistenteException {
         RegisterData registerData = obtenerDatosDeRegistroDeElUsuarioARegistrar();
         ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(registerData);
         thenDeberiaEnviarUnMensajeYElStatusCodeDebeSerCreated(response);
         AndThenDeberiaVerificarQueSellamaAlMetodoDelServicioQueRegistraAlUsuario(response, registerData);
     }
 
-    private RegisterData obtenerDatosDeRegistroDeElUsuarioARegistrar() {
+    private RegisterData obtenerDatosDeRegistroDeElUsuarioARegistrar() throws UsuarioYaExistenteException {
         RegisterData registerData = givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistroCorrectamente();
         Usuario usuario = new Usuario(registerData);
         when(service.registrarUsuario(registerData)).thenReturn(usuario);
@@ -123,7 +124,7 @@ public class RegisterControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private void AndThenDeberiaVerificarQueSellamaAlMetodoDelServicioQueRegistraAlUsuario(ResponseEntity<Map<String, Object>> response, RegisterData registerData) {
+    private void AndThenDeberiaVerificarQueSellamaAlMetodoDelServicioQueRegistraAlUsuario(ResponseEntity<Map<String, Object>> response, RegisterData registerData) throws UsuarioYaExistenteException {
         verify(service, times(1)).registrarUsuario(any());
         assertThat(Objects.requireNonNull(response.getBody()).get("Email")).isEqualTo(registerData.getEmail());
         assertThat(response.getBody().get("Nickname")).isEqualTo(registerData.getNickName());
