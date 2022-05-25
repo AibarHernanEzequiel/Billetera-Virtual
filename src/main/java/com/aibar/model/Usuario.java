@@ -20,9 +20,7 @@ public class Usuario {
         this.nickname = registerData.getNickName();
     }
 
-    public Usuario() {
-
-    }
+    public Usuario() {    }
 
     public String getNombre() {
         return nombre;
@@ -66,5 +64,9 @@ public class Usuario {
 
     public String getNickName() {
         return this.nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

@@ -56,21 +56,21 @@ public class RegisterControllerTest {
     }
 
     @Test
-    public void queUnUsuarioCuandoIngreseUnaClaveSinMayusculasNoPuedaRegistrase() {
+    void queUnUsuarioCuandoIngreseUnaClaveSinMayusculasNoPuedaRegistrase() {
         RegisterData passwordWithoutCapitalsLetter = givenQueUnUsuarioIngresaUnaClaveSinMayusculas();
         ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(passwordWithoutCapitalsLetter);
         thenElRegistroFallaYDevuelveUnStatus500(response, "P-503", "La clave debe contener al menos una letra mayuscula");
     }
 
     @Test
-    public void queUnUsuarioCuandoIngreseUnaClaveSinNumerosNoPuedaRegistrarse() {
+    void queUnUsuarioCuandoIngreseUnaClaveSinNumerosNoPuedaRegistrarse() {
         RegisterData passwordWithOutNumbers = givenQueUnUsuarioIngresaUnaClaveSinNumeros();
         ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(passwordWithOutNumbers);
         thenElRegistroFallaYDevuelveUnStatus500(response, "P-504", "La clave debe contener al menos un numero");
     }
 
     @Test
-    public void test() {
+    void queCuandoLlamoAlServicioDeRegistrarUnUsuarioEntoncesSePuedaRegistrarUnUsuario() {
         RegisterData registerData = obtenerDatosDeRegistroDeElUsuarioARegistrar();
         ResponseEntity<Map<String, Object>> response = whenEnviaElFormulario(registerData);
         thenDeberiaEnviarUnMensajeYElStatusCodeDebeSerCreated(response);
@@ -82,12 +82,6 @@ public class RegisterControllerTest {
         Usuario usuario = new Usuario(registerData);
         when(service.registrarUsuario(registerData)).thenReturn(usuario);
         return registerData;
-    }
-
-    private void AndThenDeberiaVerificarQueSellamaAlMetodoDelServicioQueRegistraAlUsuario(ResponseEntity<Map<String, Object>> response, RegisterData registerData) {
-        verify(service, times(1)).registrarUsuario(any());
-        assertThat(response.getBody().get("Email")).isEqualTo(registerData.getEmail());
-        assertThat(response.getBody().get("Nickname")).isEqualTo(registerData.getNickName());
     }
 
     private RegisterData givenQueUnUsuarioIngresaSusDatosEnElFormularioDeRegistroCorrectamente() {
@@ -129,7 +123,13 @@ public class RegisterControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    private void AndThenDeberiaVerificarQueSellamaAlMetodoDelServicioQueRegistraAlUsuario(ResponseEntity<Map<String, Object>> response, RegisterData registerData) {
+        verify(service, times(1)).registrarUsuario(any());
+        assertThat(Objects.requireNonNull(response.getBody()).get("Email")).isEqualTo(registerData.getEmail());
+        assertThat(response.getBody().get("Nickname")).isEqualTo(registerData.getNickName());
+    }
+
     private RegisterData getRegisterData(String nombre, String apellido, String email, String clave, String repiteClave, String nickname) {
-        return new RegisterData(nickname, nombre, apellido, email, clave, repiteClave);
+        return new RegisterData(nombre, apellido, email, clave, repiteClave, nickname);
     }
 }

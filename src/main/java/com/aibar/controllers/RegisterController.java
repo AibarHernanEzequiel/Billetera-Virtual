@@ -32,7 +32,7 @@ public class RegisterController {
             if (isValidEmailAndPassword(registerData)) {
                 Usuario aRegistrar = service.registrarUsuario(registerData);
                 map.put("Email", aRegistrar.getEmail());
-                map.put("Nickname", aRegistrar.getNickName());
+                map.put("Nickname", registerData.getNickName());
                 map.put("Mensaje", "Te registraste correctamente");
             }
         } catch (InvalidEmailException e) {

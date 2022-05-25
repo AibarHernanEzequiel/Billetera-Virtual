@@ -2,20 +2,8 @@ package com.aibar.controllers;
 
 public class RegisterData {
 
-    private String nickName;
-
     public RegisterData() {
 
-    }
-
-    public RegisterData(String nickName, String nombre, String apellido, String email, String password, String repeatPassword) {
-        super();
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
-        this.password = password;
-        this.repeatPassword = repeatPassword;
-        this.nickName = nickName;
     }
 
     private String nombre;
@@ -23,6 +11,16 @@ public class RegisterData {
     private String email;
     private String password;
     private String repeatPassword;
+    private String nickname;
+
+    public RegisterData(String nombre, String apellido, String email, String password, String repeatPassword, String nickname) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+        this.repeatPassword = repeatPassword;
+        this.nickname = nickname;
+    }
 
     public String getNombre() {
         return nombre;
@@ -65,10 +63,10 @@ public class RegisterData {
     }
 
     public String getNickName() {
-        return this.nickName;
+        return this.nickname;
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName;
+        this.nickname = nickName;
     }
 }
